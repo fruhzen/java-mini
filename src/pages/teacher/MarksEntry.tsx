@@ -9,9 +9,7 @@ interface Student {
 
 interface MarksData {
   [key: string]: {
-    fat1?: number;
-    fat2?: number;
-    fat3?: number;
+    fat?: number;
     assignment?: number;
     model?: number;
   };
@@ -25,15 +23,13 @@ const students: Student[] = [
 ];
 
 export const MarksEntry = () => {
-  const [activeTab, setActiveTab] = useState('fat1');
+  const [activeTab, setActiveTab] = useState('fat');
   const [marks, setMarks] = useState<MarksData>({});
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
   const tabs = [
-    { id: 'fat1', label: 'FAT 1' },
-    { id: 'fat2', label: 'FAT 2' },
-    { id: 'fat3', label: 'FAT 3' },
+    { id: 'fat', label: 'Final Assessment Test' },
     { id: 'assignment', label: 'Assignment' },
     { id: 'model', label: 'Model' },
   ];
@@ -51,14 +47,12 @@ export const MarksEntry = () => {
 
   const calculateInternal = (studentId: string) => {
     const studentMarks = marks[studentId] || {};
-    const fat1 = studentMarks.fat1 || 0;
-    const fat2 = studentMarks.fat2 || 0;
-    const fat3 = studentMarks.fat3 || 0;
+    const fat = studentMarks.fat || 0;
     const assignment = studentMarks.assignment || 0;
     const model = studentMarks.model || 0;
 
-    // Theory: Final = (0.4 * Internal) + (0.6 * Sem Marks)
-    const internal = (fat1 + fat2 + fat3) / 3 * 0.6 + assignment * 0.2 + model * 0.2;
+    // Theory: Final = (0.6 * FAT) + (0.2 * Assignment) + (0.2 * Model)
+    const internal = fat * 0.6 + assignment * 0.2 + model * 0.2;
     return Math.round(internal * 10) / 10;
   };
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, UserPlus, Search } from 'lucide-react';
+import { Users, UserPlus, Search, Edit2, Trash2 } from 'lucide-react';
 import { AddTeacherModal } from '../../components/modals/AddTeacherModal';
 import toast from 'react-hot-toast';
 
@@ -9,21 +9,29 @@ interface Teacher {
   teacherId: string;
   department: string;
   designation: string;
-  subjects: string[];
+  subjectsHandled: string[];
   email: string;
 }
+
+const subjectMap: Record<string, string> = {
+  data_structures: 'Data Structures (CS201)',
+  algorithms: 'Algorithms (CS202)',
+  database_systems: 'Database Systems (CS203)',
+  operating_systems: 'Operating Systems (CS204)',
+  computer_networks: 'Computer Networks (CS205)',
+  web_technologies: 'Web Technologies (CS206)',
+  artificial_intelligence: 'Artificial Intelligence (CS207)',
+  machine_learning: 'Machine Learning (CS208)',
+};
 
 export const Teachers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('');
+  const [editingTeacher, setEditingTeacher] = useState<Teacher | null>(null);
 
   const handleAddTeacher = (teacherData: any) => {
-    // Get the department's short name
-    const deptShortName = teacherData.department.split(' ')[0];
-    
-    // Generate teacher ID
     const currentYear = '2025';
     const sequence = (teachers.length + 1).toString().padStart(4, '0');
     const teacherId = `${currentYear}T${sequence}`;
@@ -34,13 +42,23 @@ export const Teachers = () => {
       teacherId,
       department: teacherData.department,
       designation: teacherData.designation,
-      subjects: teacherData.subjectsTaught || [],
+      subjectsHandled: teacherData.subjectsHandled,
       email: teacherData.email,
     };
 
     setTeachers(prev => [...prev, newTeacher]);
     setIsModalOpen(false);
     toast.success('Teacher added successfully!');
+  };
+
+  const handleEditTeacher = (teacher: Teacher) => {
+    setEditingTeacher(teacher);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteTeacher = (teacherId: string) => {
+    setTeachers(prev => prev.filter(teacher => teacher.id !== teacherId));
+    toast.success('Teacher removed successfully!');
   };
 
   const filteredTeachers = teachers.filter(teacher => {
@@ -59,7 +77,10 @@ export const Teachers = () => {
           <p className="mt-2 text-gray-600 dark:text-gray-300">Manage all teachers in the system</p>
         </div>
         <button
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            setEditingTeacher(null);
+            setIsModalOpen(true);
+          }}
           className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
         >
           <UserPlus size={20} />
@@ -100,7 +121,7 @@ export const Teachers = () => {
                 <th className="pb-3 text-sm font-medium text-gray-500 dark:text-gray-400">Name</th>
                 <th className="pb-3 text-sm font-medium text-gray-500 dark:text-gray-400">Department</th>
                 <th className="pb-3 text-sm font-medium text-gray-500 dark:text-gray-400">Designation</th>
-                <th className="pb-3 text-sm font-medium text-gray-500 dark:text-gray-400">Subjects</th>
+                <th className="pb-3 text-sm font-medium text-gray-500 dark:text-gray-400">Subjects Handled</th>
                 <th className="pb-3 text-sm font-medium text-gray-500 dark:text-gray-400">Actions</th>
               </tr>
             </thead>
@@ -110,14 +131,36 @@ export const Teachers = () => {
                   <td className="py-4 text-sm text-gray-900 dark:text-white">{teacher.teacherId}</td>
                   <td className="py-4 text-sm text-gray-900 dark:text-white">{teacher.name}</td>
                   <td className="py-4 text-sm text-gray-600 dark:text-gray-400">{teacher.department}</td>
-                  <td className="py-4 text-sm text-gray-600 dark:text-gray-400">{teacher.designation}</td>
                   <td className="py-4 text-sm text-gray-600 dark:text-gray-400">
-                    {teacher.subjects.join(', ')}
+                    <span className="capitalize">{teacher.designation.replace('_', ' ')}</span>
                   </td>
                   <td className="py-4">
-                    <button className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300">
-                      Edit
-                    </button>
+                    <div className="flex flex-wrap gap-2">
+                      {teacher.subjectsHandled.map((subject) => (
+                        <span
+                          key={subject}
+                          className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300 rounded-full"
+                        >
+                          {subjectMap[subject] || subject}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="py-4">
+                    <div className="flex items-center space-x-3">
+                      <button
+                        onClick={() => handleEditTeacher(teacher)}
+                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                      >
+                        <Edit2 size={18} />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteTeacher(teacher.id)}
+                        className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -128,7 +171,10 @@ export const Teachers = () => {
 
       <AddTeacherModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditingTeacher(null);
+        }}
         onSubmit={handleAddTeacher}
       />
     </div>

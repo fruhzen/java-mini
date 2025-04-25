@@ -8,9 +8,11 @@ import {
   Building2,
   UserPlus,
   LogOut,
-  Settings,
-  Bell,
-  BarChart,
+  FileText,
+  Calculator,
+  Award,
+  BookOpenCheck,
+  LineChart,
 } from 'lucide-react';
 import { UserRole } from '../../types/auth';
 
@@ -21,11 +23,12 @@ interface SidebarProps {
 
 const adminLinks = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/student-management', icon: GraduationCap, label: 'Student Management' },
-  { to: '/faculty-management', icon: Users, label: 'Faculty Management' },
-  { to: '/benchmarks', icon: BarChart, label: 'Benchmarks' },
-  { to: '/announcements', icon: Bell, label: 'Announcements' },
-  { to: '/mark-criteria', icon: Settings, label: 'Mark Criteria' },
+  { to: '/teachers', icon: Users, label: 'Teachers' },
+  { to: '/students', icon: GraduationCap, label: 'Students' },
+  { to: '/subjects', icon: BookOpen, label: 'Subjects' },
+  { to: '/departments', icon: Building2, label: 'Departments' },
+  { to: '/assign-teachers', icon: UserPlus, label: 'Assign Teachers' },
+  { to: '/analytics', icon: LineChart, label: 'Analytics' },
 ];
 
 const teacherLinks = [
@@ -34,8 +37,21 @@ const teacherLinks = [
   { to: '/semester-results', icon: GraduationCap, label: 'Semester Results' },
 ];
 
+const studentLinks = [
+  { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/results', icon: FileText, label: 'Semester Results' },
+  { to: '/cgpa', icon: Calculator, label: 'CGPA Calculator' },
+  { to: '/performance', icon: LineChart, label: 'Performance Analytics' },
+  { to: '/value-added', icon: Award, label: 'Value Added Courses' },
+  { to: '/electives', icon: BookOpenCheck, label: 'Open Electives' },
+];
+
 export const Sidebar: React.FC<SidebarProps> = ({ role, onLogout }) => {
-  const links = role === 'admin' ? adminLinks : teacherLinks;
+  const links = role === 'admin' 
+    ? adminLinks 
+    : role === 'teacher' 
+    ? teacherLinks 
+    : studentLinks;
 
   return (
     <div className="h-screen w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">

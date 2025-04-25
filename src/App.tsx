@@ -7,26 +7,29 @@ import { AdminDashboard } from './pages/admin/Dashboard';
 import { TeacherDashboard } from './pages/teacher/Dashboard';
 import { MarksEntry } from './pages/teacher/MarksEntry';
 import { StudentDashboard } from './pages/student/Dashboard';
+import { Results } from './pages/student/Results';
+import { CGPACalculator } from './pages/student/CGPACalculator';
+import { Performance } from './pages/student/Performance';
 import { UserRole, User } from './types/auth';
 
-// Import new admin pages
-import { MarkCriteria } from './pages/admin/MarkCriteria';
-import { StudentManagement } from './pages/admin/StudentManagement';
-import { FacultyManagement } from './pages/admin/FacultyManagement';
-import { Benchmarks } from './pages/admin/Benchmarks';
+// Import admin pages
+import { Teachers } from './pages/admin/Teachers';
+import { Students } from './pages/admin/Students';
+import { Subjects } from './pages/admin/Subjects';
+import { Departments } from './pages/admin/Departments';
+import { AssignTeachers } from './pages/admin/AssignTeachers';
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
 
   const handleLogin = (email: string, password: string, role: UserRole) => {
-    // Create a mock user based on role
-    const mockUser = {
+    // TODO: Implement actual authentication
+    setUser({
       id: '1',
       email,
       role,
-      name: role === 'admin' ? 'Admin User' : role === 'teacher' ? 'John Doe' : 'Student Name',
-    };
-    setUser(mockUser);
+      name: 'John Doe',
+    });
   };
 
   const handleLogout = () => {
@@ -53,10 +56,11 @@ function App() {
           {user.role === 'admin' ? (
             <>
               <Route path="dashboard" element={<AdminDashboard />} />
-              <Route path="student-management" element={<StudentManagement />} />
-              <Route path="faculty-management" element={<FacultyManagement />} />
-              <Route path="mark-criteria" element={<MarkCriteria />} />
-              <Route path="benchmarks" element={<Benchmarks />} />
+              <Route path="teachers" element={<Teachers />} />
+              <Route path="students" element={<Students />} />
+              <Route path="subjects" element={<Subjects />} />
+              <Route path="departments" element={<Departments />} />
+              <Route path="assign-teachers" element={<AssignTeachers />} />
             </>
           ) : user.role === 'teacher' ? (
             <>
@@ -64,7 +68,12 @@ function App() {
               <Route path="marks-entry" element={<MarksEntry />} />
             </>
           ) : (
-            <Route path="dashboard" element={<StudentDashboard />} />
+            <>
+              <Route path="dashboard" element={<StudentDashboard />} />
+              <Route path="results" element={<Results />} />
+              <Route path="cgpa" element={<CGPACalculator />} />
+              <Route path="performance" element={<Performance />} />
+            </>
           )}
         </Route>
       </Routes>

@@ -17,8 +17,6 @@ const currentResults: SubjectResult[] = [
   { id: '3', name: 'Computer Networks', code: 'CS203', internal: 78, external: 75, total: 76, grade: 'B+' },
   { id: '4', name: 'Operating Systems', code: 'CS204', internal: 88, external: 82, total: 85, grade: 'A' },
   { id: '5', name: 'Digital Electronics Lab', code: 'CS205', internal: 95, external: 90, total: 93, grade: 'A+' },
-  { id: '6', name: 'Value Added Course - Python Programming', code: 'VAC101', internal: 90, external: 85, total: 87, grade: 'A' },
-  { id: '7', name: 'Open Elective - Machine Learning', code: 'OE301', internal: 88, external: 84, total: 86, grade: 'A' },
 ];
 
 const stats = [

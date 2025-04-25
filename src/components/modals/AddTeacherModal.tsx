@@ -23,7 +23,7 @@ export const AddTeacherModal: React.FC<AddTeacherModalProps> = ({ isOpen, onClos
     // Professional Details
     designation: '',
     department: '',
-    subjectsTaught: [] as string[],
+    subjectsHandled: [] as string[],
     yearsOfExperience: '',
     qualification: '',
     researchArea: '',
@@ -38,6 +38,12 @@ export const AddTeacherModal: React.FC<AddTeacherModalProps> = ({ isOpen, onClos
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubjectsChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const options = e.target.selectedOptions;
+    const values = Array.from(options).map(option => option.value);
+    setFormData(prev => ({ ...prev, subjectsHandled: values }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -228,6 +234,28 @@ export const AddTeacherModal: React.FC<AddTeacherModalProps> = ({ isOpen, onClos
                   <option value="ece">Electronics</option>
                   <option value="mech">Mechanical</option>
                 </select>
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Subjects Handled
+                </label>
+                <select
+                  multiple
+                  name="subjectsHandled"
+                  value={formData.subjectsHandled}
+                  onChange={handleSubjectsChange}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white h-32"
+                >
+                  <option value="data_structures">Data Structures (CS201)</option>
+                  <option value="algorithms">Algorithms (CS202)</option>
+                  <option value="database_systems">Database Systems (CS203)</option>
+                  <option value="operating_systems">Operating Systems (CS204)</option>
+                  <option value="computer_networks">Computer Networks (CS205)</option>
+                  <option value="web_technologies">Web Technologies (CS206)</option>
+                  <option value="artificial_intelligence">Artificial Intelligence (CS207)</option>
+                  <option value="machine_learning">Machine Learning (CS208)</option>
+                </select>
+                <p className="mt-1 text-sm text-gray-500">Hold Ctrl/Cmd to select multiple subjects</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">

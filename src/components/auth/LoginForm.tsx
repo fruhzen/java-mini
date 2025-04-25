@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { UserRole } from '../../types/auth';
 import { Eye, EyeOff, LogIn } from 'lucide-react';
-import toast from 'react-hot-toast';
 
 interface LoginFormProps {
   onSubmit: (email: string, password: string, role: UserRole) => void;
@@ -18,26 +17,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Validate based on role
-    if (role === 'admin') {
-      if (email === 'admin@admin.com' && password === 'admin123') {
-        onSubmit(email, password, role);
-      } else {
-        toast.error('Invalid admin credentials');
-      }
+    if (role === 'admin' && email === 'admin@gmail.com' && password === '123456') {
+      onSubmit(email, password, role);
     } else if (role === 'teacher') {
-      if (teacherId && password) {
-        onSubmit(teacherId, password, role);
-      } else {
-        toast.error('Please fill in all fields');
-      }
+      onSubmit(teacherId, password, role);
     } else if (role === 'student') {
-      if (studentId && password) {
-        onSubmit(studentId, password, role);
-      } else {
-        toast.error('Please fill in all fields');
-      }
+      onSubmit(studentId, password, role);
     }
   };
 
@@ -137,11 +122,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Welcome Back</h1>
           <p className="text-gray-600 dark:text-gray-300">Sign in to access your account</p>
-          {role === 'admin' && (
-            <p className="mt-2 text-sm text-gray-500">
-              Use email: admin@admin.com / password: admin123
-            </p>
-          )}
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
